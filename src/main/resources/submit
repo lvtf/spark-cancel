@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# auto.offset.reset [latest, earliest, none]
+# kafka.security [PLAINTEXT, SASL_PLAINTEXT]
+
+hadoop fs -rm -r -f /tmp/{checkpoint_realtime,mysql_to_ods}
+
+export SPARK_MAJOR_VERSION=2
+
+
+spark-submit \
+--master yarn \
+--deploy-mode client \
+--files "/etc/hbase/conf/hbase-site.xml" \
+--jars "/usr/hdp/current/phoenix-client/phoenix-client.jar" \
+--class com.bdiiot.spark.streaming.SparkPhoenixMain \
+spark2-canal-demo-2.0.jar \
+"bigdata.t02.58btc.com:9092" \
+"test_canal" \
+"earliest" \
+"PLAINTEXT"
+
+#"bigdata.t02.58btc.com:9092" \
+#"test_canal" \
+#"earliest" \
+
+#"192.168.112.222:9092" \
+#"mysql_canal_to_ods" \
+#"latest" \
